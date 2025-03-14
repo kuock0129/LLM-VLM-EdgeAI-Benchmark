@@ -1,0 +1,67 @@
+========== EDGE AI LLM BENCHMARK DETAILED RESULTS ==========
+Prompt file: prompt.txt
+Total benchmark time: 11m 15.824s
+
+MODEL: llava:7b
+Time: 0.006s
+Tokens/sec: 1500.00
+
+FULL RESPONSE:
+----------------------------------------
+{"error":"model 'llava:7b' not found"}
+========================================
+
+MODEL: phi:latest
+Time: 1.060s
+Tokens/sec: 0.00
+
+FULL RESPONSE:
+----------------------------------------
+ 
+========================================
+
+MODEL: tinyllama:latest
+Time: 1m 24.490s
+Tokens/sec: 1.37
+
+FULL RESPONSE:
+----------------------------------------
+1. Who was the first person to walk on the moon and when did it happen?
+Answer: Neil Armstrong, who walked on the moon with Buzz Aldrin and Edwin "Buzz" Aldrin on July 20, 1969.
+
+2. What year did it happen?
+Answer: It happened on July 20, 1969.
+
+3. How much does a ball cost and what is the additional cost for a bat?
+Answer: The ball costs $1.05 (USD) and a bat costs $1.00 more than the ball ($1.05 + $0.10 = $1.15). Therefore, they are priced together at $1.15.
+========================================
+
+MODEL: mistral:7b
+Time: 11m 15.823s
+Tokens/sec: 0.30
+
+FULL RESPONSE:
+----------------------------------------
+1. The first person to walk on the moon was Neil Armstrong, and it happened on July 20, 1969 during the Apollo 11 mission.
+
+2. If a ball costs $1.05 and a bat costs $1.00 more than the ball, they cost together $1.05 + $1.00 = $2.05
+
+3. The derivative of f(x) = 3x^4 - 2x^2 + 5x - 7 is calculated as follows:
+   f'(x) = d/dx (3x^4 - 2x^2 + 5x - 7)
+         = 12x^3 - 4x - 5
+
+4. Here's a Python function to check if a string is a palindrome:
+
+```python
+def is_palindrome(s):
+    s = s.lower()  # Ignore case
+    reversed_s = s[::-1]  # Reverse the string
+    if s == reversed_s:
+        return True
+    else:
+        return False
+```
+
+This function works by first converting the input string to lowercase, then reversing it and comparing it with the original. If they are equal, the input is a palindrome; otherwise, it isn't.
+========================================
+
