@@ -1,67 +1,49 @@
 ========== EDGE AI LLM BENCHMARK DETAILED RESULTS ==========
 Prompt file: prompt.txt
-Total benchmark time: 11m 15.824s
+Total benchmark time: 6m 39.425s
+Baseline Ollama memory usage: 82 MB
 
-MODEL: llava:7b
-Time: 0.006s
-Tokens/sec: 1500.00
-
-FULL RESPONSE:
-----------------------------------------
-{"error":"model 'llava:7b' not found"}
-========================================
-
-MODEL: phi:latest
-Time: 1.060s
-Tokens/sec: 0.00
+MODEL: tinyllama:1.1b-chat-v1-q8_0
+Time: 6m 39.373s
+Tokens/sec: 0.87
+Peak memory: 89 MB
+Memory increase: 6 MB
 
 FULL RESPONSE:
 ----------------------------------------
- 
-========================================
+General Knowledge
 
-MODEL: tinyllama:latest
-Time: 1m 24.490s
-Tokens/sec: 1.37
+Who was the first person to walk on the moon and when did it happen?
 
-FULL RESPONSE:
-----------------------------------------
-1. Who was the first person to walk on the moon and when did it happen?
-Answer: Neil Armstrong, who walked on the moon with Buzz Aldrin and Edwin "Buzz" Aldrin on July 20, 1969.
+Reasoning: The first person to walk on the moon was Neil Armstrong, who achieved this historic feat on August 21, 1969.
 
-2. What year did it happen?
-Answer: It happened on July 20, 1969.
+Mathematics
 
-3. How much does a ball cost and what is the additional cost for a bat?
-Answer: The ball costs $1.05 (USD) and a bat costs $1.00 more than the ball ($1.05 + $0.10 = $1.15). Therefore, they are priced together at $1.15.
-========================================
+Calculate the derivative of f(x) = 3x^4 - 2x^2 + 5x - 7.
 
-MODEL: mistral:7b
-Time: 11m 15.823s
-Tokens/sec: 0.30
+Coining: The derivative of a function is the change in the function as its parameters are changed. In this case, f(x) = 3x^4 - 2x^2 + 5x - 7, we can find that the derivative is given by:
 
-FULL RESPONSE:
-----------------------------------------
-1. The first person to walk on the moon was Neil Armstrong, and it happened on July 20, 1969 during the Apollo 11 mission.
+d(f(x))/dx = (3)(-2)^2(x^4 - 2x^2 + 5) - (5)(x^2 - 7) = 0
 
-2. If a ball costs $1.05 and a bat costs $1.00 more than the ball, they cost together $1.05 + $1.00 = $2.05
+Therefore, f'(x) = (3)(-2)^2(x^4 - 2x^2 + 5) / (x^2 - 7)
 
-3. The derivative of f(x) = 3x^4 - 2x^2 + 5x - 7 is calculated as follows:
-   f'(x) = d/dx (3x^4 - 2x^2 + 5x - 7)
-         = 12x^3 - 4x - 5
+Coining: f' is the derivative of f. In this case, f' = (3)(-2)^2(x^4 - 2x^2 + 5) / (x^2 - 7)
 
-4. Here's a Python function to check if a string is a palindrome:
+The value of f'(x) is equal to the change in the function when its parameters are changed. In this case, f'(x) = (3)(-2)^2(x^4 - 2x^2 + 5) / (-2)(x^2 - 7)
 
-```python
-def is_palindrome(s):
-    s = s.lower()  # Ignore case
-    reversed_s = s[::-1]  # Reverse the string
-    if s == reversed_s:
-        return True
-    else:
-        return False
-```
+Therefore, f' = (3)(-2)^2(x^4 - 2x^2 + 5) / (-2)(x^2 - 7)
 
-This function works by first converting the input string to lowercase, then reversing it and comparing it with the original. If they are equal, the input is a palindrome; otherwise, it isn't.
+Coining: This formula is called the "f'(x) = a(x^2 - b)" formula, where 'a' and 'b' are constants. The function f(x) = x^4 - 2x^2 + 5 is given by the given values of a and b:
+
+x^4 - 2x^2 + 5 = (x - 2)^2 + 4 * (-1)^n * x + n
+
+Therefore, f'(x) = (3)(-2)^2(x^4 - 2x^2 + 5) / (-2)(x^2 - 7)
+
+Finally, we can use this formula to calculate the derivative of any function:
+
+f(x) = x^4 - 2x^2 + 5
+f'(x) = (3)(-2)^2(x^4 - 2x^2 + 5) / (-2)(x^2 - 7)
+
+where we have used the value of f' at x = 2 and x = -1.
 ========================================
 
