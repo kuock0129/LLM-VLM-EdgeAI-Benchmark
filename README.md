@@ -1,5 +1,3 @@
-# LLM-VLM-EdgeAI-Benchmark
-
 A tool for benchmarking Large Language Models running on Ollama in edge computing environments.
 
 ## Features
@@ -9,6 +7,7 @@ A tool for benchmarking Large Language Models running on Ollama in edge computin
 - Section-by-section prompt evaluation
 - Memory optimization options (swap configuration, memory mapping)
 - Parallel or sequential model execution
+- Detailed reporting and results export
 
 ## Requirements
 
@@ -54,3 +53,4 @@ make
 - `--prompt`, `-i FILE`: Specify prompt file (default: prompt.txt)
 - `--output`, `-o FILE`: Save detailed results to file
 - `--model`, `-m MODEL`: Specify a model to test (can be used multiple times)
+- `--help`, `-h`: Show help message
