@@ -1,3 +1,4 @@
+# The Edge AI Benchmark for Large-Language Models (LLMs) on Raspberry Pi 4 
 A tool for benchmarking Large Language Models running on Ollama in edge computing environments.
 
 ## Features
