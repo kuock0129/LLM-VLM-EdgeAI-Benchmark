@@ -1,0 +1,99 @@
+========== EDGE AI LLM BENCHMARK DETAILED RESULTS ==========
+Prompt file: prompt.txt
+Total benchmark time: 4m 51.086s
+Baseline Ollama memory usage: 73 MB
+
+MODEL: tinyllama:latest
+Time: 1m 35.398s
+Tokens/sec: 2.34
+Peak memory: 73 MB
+Memory increase: 512 KB
+
+SECTION-BY-SECTION METRICS:
+
+=== SECTION: General Knowledge ===
+QUESTION:
+Who was the first person to walk on the moon and what year did it happen?
+Time: 13.009s
+Memory: 74 MB
+
+RESPONSE:
+The first person to walk on the moon was Apollo 11 astronaut Neil Armstrong, who walked on the moon on July 20, 1969. The mission took place in July of that year.
+----------------------------------------
+
+=== SECTION: Reasoning ===
+QUESTION:
+If a ball costs $1.05 and a bat costs $1.00 more than the ball, how much do they cost together?
+Time: 31.586s
+Memory: 75 MB
+
+RESPONSE:
+Based on the information provided in the given text, it is not specified how much the ball cost or how much the bat cost together. The text simply states that if a ball costs $1.05 and a bat costs $1.00 more than the ball, then they would cost together. It does not give any specific details about the price of each item separately or in combination.
+----------------------------------------
+
+=== SECTION: Mathematics ===
+QUESTION:
+Calculate the derivative of f(x) = 3x^4 - 2x^2 + 5x - 7.
+Time: 1m 35.261s
+Memory: 76 MB
+
+RESPONSE:
+To calculate the derivative of the function f(x), we need to differentiate it with respect to x. The function f(x) is given by:
+
+    f(x) = 3x^4 - 2x^2 + 5x - 7
+
+We want to find the derivative of f(x) at x=1, which we can represent as:
+
+    df/dx = 3((1 - 1)^4 - 2((1 - 1)^2 + 1 - 1)^2 + 5((1 - 1)^-2 - 0)^2 - 7(1 - 1)
+
+First, we calculate the value of f(1):
+
+    f(1) = 3 * 1^4 - 2 * 1^2 + 5 * (-1)^2 - 7 * 1
+
+We can rearrange this expression as:
+
+    df/dx = 3 * (1^4 - 2 * (-1)^2 + 5 * (-1)) / (1^2)
+
+    df/dx = 6 * (-1)^2 / 1^2
+
+    df/dx = 0.6 * (-1)^2 / 1^2
+
+Substituting this expression into the original function f(x), we obtain:
+
+    df/dx = 0.4 * (3 - 8) / 2^2
+
+This is the derivative of the function f(x).
+----------------------------------------
+
+=== SECTION: Coding ===
+QUESTION:
+Write a Python function to check if a string is a palindrome.
+Time: 55.417s
+Memory: 76 MB
+
+RESPONSE:
+```python
+def is_palindrome(str: str) -> bool:
+    """
+    Checks whether a given string is a palindrome or not.
+    
+    :param str: The input string to check for palindrome.
+    :return bool: True if the input string is a palindrome, False otherwise.
+    """
+
+    if len(str) < 2:
+        return True
+    
+    start = end = 0
+    while start < len(str) - 1 and end < len(str) - 1:
+        if str[start] == str[end]:
+            start += 1
+            end += 1
+        else:
+            return False
+    
+    return True
+```
+----------------------------------------
+========================================
+

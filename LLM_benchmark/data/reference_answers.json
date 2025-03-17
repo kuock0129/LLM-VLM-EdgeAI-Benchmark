@@ -1,0 +1,6 @@
+{
+    "generalKnowledge": "Neil Armstrong was the first person to walk on the moon and it happened in 1969.",
+    "reasoning": "If a ball costs $1.05 and a bat costs $1.00 more than the ball, they cost together $3.10.",
+    "mathematics": "The derivative of f(x) = 3x^4 - 2x^2 + 5x - 7 is 12x^3 - 4x + 5.",
+    "coding": "def is_palindrome(s):\n    return s == s[::-1]"
+  }

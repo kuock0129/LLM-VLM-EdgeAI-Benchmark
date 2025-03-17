@@ -1,10 +1,12 @@
 #include "llm_benchmark.h"
 #include "system_utils.h"
+#include <nlohmann/json.hpp>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+using json = nlohmann::json;
 
 LLMBenchmark::LLMBenchmark(
     const std::string& prompt_path, 
@@ -446,69 +448,124 @@ void LLMBenchmark::run() {
     }
     
     // Save detailed results to file if specified
+    // if (!output_file.empty()) {
+    //     std::ofstream out(output_file);
+    //     if (out.is_open()) {
+    //         out << "========== EDGE AI LLM BENCHMARK DETAILED RESULTS ==========" << std::endl;
+    //         out << "Prompt file: " << prompt_file << std::endl;
+    //         out << "Total benchmark time: " << format_duration(total_duration) << std::endl;
+            
+    //         if (track_memory) {
+    //             out << "Baseline Ollama memory usage: " << format_memory(baseline_memory) << std::endl;
+    //         }
+            
+    //         out << std::endl;
+            
+    //         for (const auto& result : results) {
+    //             out << "MODEL: " << result.model_name << std::endl;
+    //             out << "Time: " << format_duration(result.duration) << std::endl;
+    //             out << "Tokens/sec: " << std::fixed << std::setprecision(2) << result.tokens_per_second << std::endl;
+                
+    //             if (track_memory) {
+    //                 out << "Peak memory: " << format_memory(result.peak_memory) << std::endl;
+    //                 out << "Memory increase: " << format_memory(result.peak_memory - result.baseline_memory) << std::endl;
+    //             }
+                
+    //             if (!result.section_responses.empty()) {
+    //                 out << "\nSECTION-BY-SECTION METRICS:" << std::endl;
+                    
+    //                 for (const auto& section : prompt_sections) {
+    //                     out << "\n=== SECTION: " << section.first << " ===" << std::endl;
+    //                     out << "QUESTION:" << std::endl;
+    //                     out << section.second << std::endl;
+                        
+    //                     auto metrics_it = result.section_metrics.find(section.first);
+    //                     if (metrics_it != result.section_metrics.end()) {
+    //                         out << "Time: " << format_duration(metrics_it->second.first) << std::endl;
+                            
+    //                         if (track_memory) {
+    //                             out << "Memory: " << format_memory(metrics_it->second.second) << std::endl;
+    //                         }
+    //                     }
+                        
+    //                     out << "\nRESPONSE:" << std::endl;
+                        
+    //                     auto it = result.section_responses.find(section.first);
+    //                     if (it != result.section_responses.end()) {
+    //                         out << it->second << std::endl;
+    //                     } else {
+    //                         out << "[No response for this section]" << std::endl;
+    //                     }
+                        
+    //                     out << "----------------------------------------" << std::endl;
+    //                 }
+    //             } else {
+    //                 out << "\nFULL RESPONSE:" << std::endl;
+    //                 out << "----------------------------------------" << std::endl;
+    //                 out << result.response << std::endl;
+    //             }
+                
+    //             out << "========================================" << std::endl;
+    //             out << std::endl;
+    //         }
+            
+    //         out.close();
+    //         std::cout << "\nDetailed results saved to " << output_file << std::endl;
+    //     } else {
+    //         std::cerr << "Error: Could not open output file " << output_file << std::endl;
+    //     }
+    // }
     if (!output_file.empty()) {
         std::ofstream out(output_file);
         if (out.is_open()) {
-            out << "========== EDGE AI LLM BENCHMARK DETAILED RESULTS ==========" << std::endl;
-            out << "Prompt file: " << prompt_file << std::endl;
-            out << "Total benchmark time: " << format_duration(total_duration) << std::endl;
+            // Create a JSON object for the results
+            json j;
+            
+            // Add benchmark metadata
+            j["metadata"]["prompt_file"] = prompt_file;
+            j["metadata"]["total_time"] = format_duration(total_duration);
             
             if (track_memory) {
-                out << "Baseline Ollama memory usage: " << format_memory(baseline_memory) << std::endl;
+                j["metadata"]["baseline_memory"] = format_memory(baseline_memory);
             }
             
-            out << std::endl;
-            
+            // Add model results
             for (const auto& result : results) {
-                out << "MODEL: " << result.model_name << std::endl;
-                out << "Time: " << format_duration(result.duration) << std::endl;
-                out << "Tokens/sec: " << std::fixed << std::setprecision(2) << result.tokens_per_second << std::endl;
+                // Store the full model response
+                j["model_outputs"][result.model_name] = result.response;
+                
+                // Store performance metrics
+                j["metrics"][result.model_name]["duration_ms"] = result.duration.count();
+                j["metrics"][result.model_name]["tokens_per_second"] = result.tokens_per_second;
                 
                 if (track_memory) {
-                    out << "Peak memory: " << format_memory(result.peak_memory) << std::endl;
-                    out << "Memory increase: " << format_memory(result.peak_memory - result.baseline_memory) << std::endl;
+                    j["metrics"][result.model_name]["peak_memory_kb"] = result.peak_memory;
+                    j["metrics"][result.model_name]["memory_increase_kb"] = result.peak_memory - result.baseline_memory;
                 }
                 
+                // Store section responses if available
                 if (!result.section_responses.empty()) {
-                    out << "\nSECTION-BY-SECTION METRICS:" << std::endl;
-                    
-                    for (const auto& section : prompt_sections) {
-                        out << "\n=== SECTION: " << section.first << " ===" << std::endl;
-                        out << "QUESTION:" << std::endl;
-                        out << section.second << std::endl;
+                    for (const auto& [section, response] : result.section_responses) {
+                        j["section_outputs"][result.model_name][section] = response;
                         
-                        auto metrics_it = result.section_metrics.find(section.first);
+                        auto metrics_it = result.section_metrics.find(section);
                         if (metrics_it != result.section_metrics.end()) {
-                            out << "Time: " << format_duration(metrics_it->second.first) << std::endl;
+                            j["section_metrics"][result.model_name][section]["duration_ms"] = 
+                                metrics_it->second.first.count();
                             
                             if (track_memory) {
-                                out << "Memory: " << format_memory(metrics_it->second.second) << std::endl;
+                                j["section_metrics"][result.model_name][section]["memory_kb"] = 
+                                    metrics_it->second.second;
                             }
                         }
-                        
-                        out << "\nRESPONSE:" << std::endl;
-                        
-                        auto it = result.section_responses.find(section.first);
-                        if (it != result.section_responses.end()) {
-                            out << it->second << std::endl;
-                        } else {
-                            out << "[No response for this section]" << std::endl;
-                        }
-                        
-                        out << "----------------------------------------" << std::endl;
                     }
-                } else {
-                    out << "\nFULL RESPONSE:" << std::endl;
-                    out << "----------------------------------------" << std::endl;
-                    out << result.response << std::endl;
                 }
-                
-                out << "========================================" << std::endl;
-                out << std::endl;
             }
             
+            // Write formatted JSON to file
+            out << std::setw(4) << j << std::endl;
             out.close();
-            std::cout << "\nDetailed results saved to " << output_file << std::endl;
+            std::cout << "\nJSON results saved to " << output_file << std::endl;
         } else {
             std::cerr << "Error: Could not open output file " << output_file << std::endl;
         }

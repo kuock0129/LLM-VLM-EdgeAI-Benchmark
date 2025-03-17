@@ -3,32 +3,57 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -O2
 LDFLAGS = -lcurl -lpthread
 INCLUDES = -I./include -I/usr/include/nlohmann
 
-TARGET = edge_ai_benchmark
+BENCHMARK_TARGET = edge_ai_benchmark
+ROUGE_TARGET = rouge_evaluator
 BUILD_DIR = build
 SRC_DIR = src
+TOOLS_DIR = tools
 INCLUDE_DIR = include
 
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
-DEPS = $(OBJS:.o=.d)
+BENCHMARK_SRCS = $(SRC_DIR)/api_client.cpp \
+                 $(SRC_DIR)/memory_monitor.cpp \
+                 $(SRC_DIR)/system_utils.cpp \
+                 $(SRC_DIR)/llm_benchmark.cpp \
+                 $(SRC_DIR)/main.cpp
 
-# Create build directory if it doesn't exist
+# Fix: Correctly specify source files with their proper paths
+ROUGE_SRCS = $(SRC_DIR)/rouge_evaluator.cpp \
+             $(TOOLS_DIR)/rouge_evaluator.cpp
+
+# Fix: Properly map source files to their corresponding object files
+BENCHMARK_OBJS = $(BENCHMARK_SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
+ROUGE_OBJS = $(SRC_DIR)/rouge_evaluator.cpp:$(BUILD_DIR)/rouge_evaluator.o \
+             $(TOOLS_DIR)/rouge_evaluator.cpp:$(BUILD_DIR)/$(TOOLS_DIR)/rouge_evaluator.o
+
+DEPS = $(BENCHMARK_OBJS:.o=.d)
+DEPS += $(BUILD_DIR)/rouge_evaluator.d $(BUILD_DIR)/$(TOOLS_DIR)/rouge_evaluator.d
+
+# Create build directory and subdirectories if they don't exist
 $(shell mkdir -p $(BUILD_DIR))
+$(shell mkdir -p $(BUILD_DIR)/$(TOOLS_DIR))
 
 .PHONY: all clean install-deps
 
-all: $(TARGET)
+all: $(BENCHMARK_TARGET) $(ROUGE_TARGET)
 
-# Link the final executable
-$(TARGET): $(OBJS)
+# Link the benchmark executable
+$(BENCHMARK_TARGET): $(BENCHMARK_OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-# Compile each source file and generate dependencies
+# Link the ROUGE evaluator executable
+$(ROUGE_TARGET): $(BUILD_DIR)/rouge_evaluator.o $(BUILD_DIR)/$(TOOLS_DIR)/rouge_evaluator.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+# Compile source files
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
+# Compile tools files
+$(BUILD_DIR)/$(TOOLS_DIR)/%.o: $(TOOLS_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET)
+	rm -rf $(BUILD_DIR) $(BENCHMARK_TARGET) $(ROUGE_TARGET)
 
 install-deps:
 	sudo apt-get update
