@@ -81,10 +81,10 @@ make
 
 ```bash
 # Basic usage
-./edge_ai_benchmark --prompt prompt.txt --output results.txt
+./edge_ai_benchmark --prompt prompt.txt --model tinyllama:latest --output results.json
 
 # With specific models
-./edge_ai_benchmark --prompt prompt.txt --model tinyllama:latest --verbose
+./edge_ai_benchmark --prompt prompt.txt --model tinyllama:latest --verbose --output results.json
 
 # With memory optimization for low-RAM devices
 ./edge_ai_benchmark --prompt prompt.txt  --model tinyllama:latest --verbose --swap 4096 --swappiness 10 --mmap --output results.json
