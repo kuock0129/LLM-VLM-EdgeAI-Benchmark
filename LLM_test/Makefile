@@ -1,25 +1,37 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -O2
+CXXFLAGS = -std=c++17 -Wall -Wextra -pedantic -O2
 LDFLAGS = -lcurl -lpthread
-INCLUDES = -I/usr/include/nlohmann
+INCLUDES = -I./include -I/usr/include/nlohmann
 
 TARGET = edge_ai_benchmark
-SRCS = edge_ai_benchmark.cpp
-OBJS = $(SRCS:.cpp=.o)
+BUILD_DIR = build
+SRC_DIR = src
+INCLUDE_DIR = include
+
+SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)
+DEPS = $(OBJS:.o=.d)
+
+# Create build directory if it doesn't exist
+$(shell mkdir -p $(BUILD_DIR))
+
+.PHONY: all clean install-deps
 
 all: $(TARGET)
 
+# Link the final executable
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
+# Compile each source file and generate dependencies
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -rf $(BUILD_DIR) $(TARGET)
 
 install-deps:
 	sudo apt-get update
 	sudo apt-get install -y build-essential g++ libcurl4-openssl-dev nlohmann-json3-dev
 
-.PHONY: all clean install-deps
+-include $(DEPS)
