@@ -1,0 +1,11 @@
+## General Knowledge
+Who was the first person to walk on the moon and what year did it happen?
+
+## Reasoning
+If a ball costs $1.05 and a bat costs $1.00 more than the ball, how much do they cost together?
+
+## Mathematics
+Calculate the derivative of f(x) = 3x^4 - 2x^2 + 5x - 7.
+
+## Coding
+Write a Python function to check if a string is a palindrome.
